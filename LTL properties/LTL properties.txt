@@ -1,0 +1,56 @@
+// For Code-1: Considering case where amount, balance,pin etc. are considered correct
+
+/*
+// Safety property to ensure that withdraw can occur only if Pin was entered earlier
+ltl no_withdrawal_without_pin {
+    [](withdrawal_requested -> (pin_attempts > 0))
+}
+*/
+
+/* 
+// Liveness property ensuring cash is dispensed if withdrawal is requested or ATM ends session due to some reasons (eg: insufficient funds)
+ltl transaction_complete {
+    [](withdrawal_requested -> <> (cash_dispensed || (atm_to_user == exit)))
+}
+*/
+
+/* 
+// Liveness poperty that eventually seassion ends in ATM and is not stuck infinitely creating a deadlock
+ltl session_ended_flag {
+    [](more_no -> <> session_ended)
+}
+*/ 
+
+/-------------------------------------------------------------------------------------------------------------------------------------------------------/
+
+// For Code-2: Considering case where balance < withdrawal amount
+
+*/
+// Safety Property to ensure if withdrawal amount > balance amount --> cash is not dispensed
+ltl no_cash_on_insufficient_funds {
+    []( (withdrawal_requested && (withdrawal_amount > balance_amt)) -> !cash_dispensed )
+}
+*/
+
+/-------------------------------------------------------------------------------------------------------------------------------------------------------/
+
+For Code-3: Considering the case of wrong PIN attempt
+
+/* Safety property to ensure that if User entered wrong PIN, then no transaction occured before termination
+ltl no_transaction_upon_wrong_pin {
+    [](wrong_pin_attempts -> !transaction_done)
+}
+*/
+
+/*
+// Liveness Property to ensure that if user enters incorrect pin, eventually the session will be terminated
+ltl wrong_pin_termination {
+    [](wrong_pin_attempts -> <>session_terminated)
+}
+*/
+
+/* Safety property to ensure that if User entered wrong PIN, then no transaction occured before termination
+ltl no_cash_on_wrong_pin {
+    [](wrong_pin_attempts -> !cash_dispensed)
+}
+*/
